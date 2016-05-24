@@ -1,0 +1,22 @@
+import fetch from 'isomorphic-fetch';
+
+
+  var url = 'http://realtime.mbta.com/developer/api/v2/predictionsbystop?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop=70005&format=json';
+  var minTime = 0;//7*60;
+
+fetch(url).then(response => response.json()).then(function(response) {
+  console.log(response);
+
+  try {
+    var trips = response['mode'][0]['route'][0]['direction'][0]['trip'];
+    var validTripTimes = trips.map(trip => parseInt(trip.pre_away)).filter(time => time > minTime);
+
+    if (validTripTimes[0]){
+      console.log(validTripTimes[0]);
+    } else {
+      console.log(validTripTimes)
+    }
+  } catch(err) {
+    console.log(err);
+  }
+});
